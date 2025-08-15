@@ -21,8 +21,6 @@ jobs:
     
     permissions:
       contents: write
-      pages: write
-      id-token: write
     
     steps:
       - name: Checkout
@@ -66,15 +64,8 @@ jobs:
             echo "ℹ️ No changes to CSS files"
           fi
       
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        with:
-          enablement: true
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-      
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+      - name: Show build results
+        run: |
+          echo "✅ Build completed successfully!"
+          echo "📁 Generated files in dist/ directory:"
+          find dist/ -type f -name "*.css" -o -name "*.js" -o -name "*.json" | head -10
