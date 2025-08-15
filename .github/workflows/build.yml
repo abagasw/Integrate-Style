@@ -38,8 +38,11 @@ jobs:
         echo "Generated design token files:"
         ls -la dist/
         echo ""
-        echo "CSS Variables:"
-        head -20 dist/css/variables.css
+        echo "CSS subdirectories:"
+        ls -la dist/css/
         echo ""
-        echo "JavaScript Tokens:"
-        head -10 dist/js/tokens.js
+        echo "Sample CSS Variables (colors-basic):"
+        head -20 dist/css/colors-basic/variables.css 2>/dev/null || echo "File not found"
+        echo ""
+        echo "Sample JavaScript Tokens (colors-basic):"
+        head -10 dist/js/colors-basic/tokens.js 2>/dev/null || echo "File not found"

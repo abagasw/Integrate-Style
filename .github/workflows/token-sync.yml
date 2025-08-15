@@ -155,7 +155,7 @@ jobs:
             echo "❌ Pull failed, trying to resolve conflicts..."
             
             # For generated files, always use our version (ours strategy)
-            git checkout --ours dist/css/styles.css dist/css/variables.css dist/js/tokens.js dist/scss/_variables.scss 2>/dev/null || true
+            git checkout --ours dist/ 2>/dev/null || true
             git add dist/ 2>/dev/null || true
             
             # Complete the merge
