@@ -58,7 +58,7 @@ jobs:
           # Check if there are changes
           if ! git diff --quiet; then
             git add dist/
-            git add tokens/tokens.json
+            git add tokens/*-converted.json
             git commit -m "🤖 Auto-generate CSS from tokens [skip ci]" || exit 0
             git push
             echo "✅ CSS files updated and committed"
@@ -66,8 +66,10 @@ jobs:
             echo "ℹ️ No changes to CSS files"
           fi
       
-      - name: Deploy to Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
