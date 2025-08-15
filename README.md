@@ -1,8 +1,7 @@
 # 🎨 Design Token System
 
-Sistem Design Token yang powerful menggunakan Style Dictionary untuk mengelola dan mendistribusikan design tokens ke berbagai platform dan format.
+Sistem Design Token menggunakan Style Dictionary untuk mengelola dan mendistribusikan design tokens ke berbagai format.
 
-[![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-blue)](https://yourusername.github.io/your-repo-name/demo.html)
 [![npm version](https://img.shields.io/badge/npm-v1.0.0-green)](package.json)
 [![License](https://img.shields.io/badge/license-ISC-blue)](LICENSE)
 
@@ -14,17 +13,15 @@ Sistem Design Token yang powerful menggunakan Style Dictionary untuk mengelola d
 - [Struktur Project](#-struktur-project)
 - [Format Output](#-format-output)
 - [Integrasi Figma](#-integrasi-figma)
-- [Deployment](#-deployment)
-- [Pengembangan](#-pengembangan)
+- [Workflow GitHub Actions](#-workflow-github-actions)
 
 ## ✨ Fitur Utama
 
 - 🎯 **Multi-Platform Output**: CSS, SCSS, JavaScript, JSON, TypeScript
 - 🔄 **Sinkronisasi Figma**: Integrasi dengan Token Studio for Figma
-- 🚀 **Auto Deployment**: GitHub Actions untuk build dan deploy otomatis
+- 🚀 **Auto Build**: GitHub Actions untuk build otomatis
 - 🎨 **Utility Classes**: Generate CSS utility classes otomatis
 - 📱 **Responsive**: Konversi px ke rem otomatis
-- ☁️ **CDN Ready**: Deploy ke Cloudflare Pages
 
 ## 🚀 Instalasi
 
@@ -48,29 +45,7 @@ npm run build
 
 ## 🎯 Cara Penggunaan
 
-### 1. CDN Import (Termudah)
-
-Tambahkan baris ini ke CSS atau HTML untuk langsung menggunakan semua design tokens:
-
-```css
-@import url("https://cdn.jsdelivr.net/gh/MIICollaboration/design-token-system@main/dist/css/colors-basic/variables.css");
-```
-
-**Penggunaan di HTML:**
-```html
-<head>
-    <style>
-        @import url("https://cdn.jsdelivr.net/gh/MIICollaboration/design-token-system@main/dist/css/colors-basic/variables.css");
-        
-        body {
-            background: var(--global-primary);
-            color: var(--global-white);
-        }
-    </style>
-</head>
-```
-
-### 2. Mengelola Tokens
+### 1. Mengelola Tokens
 
 Tokens disimpan dalam folder `tokens/` dengan format JSON:
 
@@ -91,7 +66,7 @@ Tokens disimpan dalam folder `tokens/` dengan format JSON:
 }
 ```
 
-### 3. Build Tokens
+### 2. Build Tokens
 
 ```bash
 # Build semua tokens
@@ -104,7 +79,7 @@ npm run build:clean
 npm run dev
 ```
 
-### 4. Menggunakan Output
+### 3. Menggunakan Output
 
 #### CSS Variables
 ```css
@@ -162,6 +137,7 @@ design-token-system/
 │   ├── js/                    # JavaScript/TypeScript
 │   └── json/                  # JSON format
 ├── .github/workflows/         # GitHub Actions
+│   └── build-css.yml         # Auto build workflow
 ├── build.js                   # Build script
 ├── sync-tokens.js            # Figma sync script
 ├── config.json               # Style Dictionary config
@@ -235,151 +211,52 @@ $global-spacing-md: 1rem;
 1. **Figma → Code**:
    - Edit tokens di Figma Token Studio
    - Push ke GitHub dari plugin
-   - GitHub Actions otomatis build dan deploy
+   - GitHub Actions otomatis build
 
 2. **Code → Figma**:
    - Edit file JSON di `tokens/`
    - Run `npm run sync:to-figma`
    - Pull dari GitHub di Figma Token Studio
 
-## 🚀 Deployment
+## 🚀 Workflow GitHub Actions
 
-### GitHub Pages (Otomatis)
+### Auto Build
 
-Setiap push ke `main` branch akan otomatis:
-1. Build semua tokens
-2. Deploy ke GitHub Pages
-3. Update CDN links
+Setiap push ke folder `tokens/` akan otomatis:
+1. Build semua tokens ke format CSS, JS, SCSS, JSON
+2. Simpan hasil di folder `dist/`
+3. Commit dan push hasil build ke repository
 
-### Cloudflare Pages
+### Manual Trigger
 
-1. **Setup Secrets**:
-   ```bash
-   # Set GitHub secrets
-   CLOUDFLARE_API_TOKEN=your_token
-   CLOUDFLARE_ACCOUNT_ID=your_account_id
-   ```
+Anda juga bisa menjalankan workflow secara manual:
+1. Buka tab "Actions" di GitHub repository
+2. Pilih "Build CSS from Tokens"
+3. Klik "Run workflow"
 
-2. **Deploy Manual**:
-   ```bash
-   npm run build
-   # Upload dist/ ke Cloudflare Pages
-   ```
-
-## 🛠 Pengembangan
-
-### Menambah Token Baru
-
-1. **Edit file JSON** di `tokens/`:
-   ```json
-   {
-     "global": {
-       "newColor": {
-         "$type": "color",
-         "$value": "#123456"
-       }
-     }
-   }
-   ```
-
-2. **Build ulang**:
-   ```bash
-   npm run build
-   ```
-
-### Custom Transforms
-
-Edit `build.js` untuk menambah transform custom:
-
-```javascript
-StyleDictionary.registerTransform({
-  name: 'custom/transform',
-  type: 'value',
-  matcher: function(token) {
-    return token.type === 'custom';
-  },
-  transformer: function(token) {
-    return `custom-${token.value}`;
-  }
-});
-```
-
-### Custom Formats
-
-Tambah format output baru:
-
-```javascript
-StyleDictionary.registerFormat({
-  name: 'custom/format',
-  formatter: function(dictionary) {
-    return dictionary.allTokens
-      .map(token => `${token.name}: ${token.value}`)
-      .join('\n');
-  }
-});
-```
-
-## 📚 Scripts Available
+## 🛠️ Scripts
 
 ```bash
-npm run build          # Build semua tokens
-npm run build:clean    # Clean + build
-npm run dev           # Build + open demo
-npm run sync:from-figma # Sync dari Figma
-npm run sync:to-figma   # Sync ke Figma
-```
-
-## 🎨 Token Categories
-
-### Colors
-- **Brand Colors**: Primary, secondary
-- **Neutral Colors**: White, black, gray scale (50-900)
-
-### Spacing
-- **Scale**: xs (4px) → 2xl (48px)
-- **Usage**: Padding, margins, gaps
-
-### Border Radius
-- **Scale**: none, sm, md, lg, full
-- **Usage**: Rounded corners
-
-### Typography
-- **Font Sizes**: xs → 4xl
-- **Font Weights**: normal, semibold, bold
-- **Line Heights**: tight, normal, relaxed
-
-## 🤝 Contributing
-
-1. Fork repository
-2. Buat feature branch
-3. Commit changes
-4. Push ke branch
-5. Buat Pull Request
-
-## 📄 License
-
-ISC License - lihat file LICENSE untuk detail.
-
-## 🆘 Troubleshooting
-
-### Build Error
-```bash
-# Clear node_modules dan reinstall
-rm -rf node_modules package-lock.json
-npm install
+# Build tokens
 npm run build
+
+# Build dengan clean
+npm run build:clean
+
+# Sync dari Figma
+npm run sync:from-figma
+
+# Sync ke Figma
+npm run sync:to-figma
+
+# Development server
+npm run dev
 ```
 
-### Figma Sync Issues
-- Pastikan Personal Access Token memiliki repo permissions
-- Check file path di Token Studio settings
-- Verify branch name (main/master)
+## 📝 License
 
-### CDN Cache Issues
-- Gunakan versioned URLs: `@main` atau `@v1.0.0`
-- Clear browser cache
-- Wait for CDN propagation (5-10 menit)
+ISC License - lihat file [LICENSE](LICENSE) untuk detail.
 
 ---
 
-**Happy Designing! 🎨✨**
+**Dibuat dengan ❤️ menggunakan Style Dictionary**
