@@ -1,4 +1,5 @@
 {
+  "$description": "Basic color tokens for design system",
   "global": {
     "primary": {
       "$type": "color",
