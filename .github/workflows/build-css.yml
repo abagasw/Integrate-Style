@@ -57,7 +57,7 @@ jobs:
           if ! git diff --quiet; then
             git add dist/
             git add tokens/*-converted.json
-            git commit -m "🤖 Auto-generate CSS from tokens [skip ci]" || exit 0
+            git commit -m "🤖 Auto-generate CSS from tokens" || exit 0
             git push
             echo "✅ CSS files updated and committed"
           else
